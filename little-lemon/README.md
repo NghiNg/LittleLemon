@@ -1,3 +1,8 @@
+# Little Lemon Restaurant - Reserve a table restaurant
+
+Figma wireframe and prototype - https://www.figma.com/file/t4kFRLEZT8ACklUjNJX10A/Little-Lemon?node-id=2%3A438&t=xztudnm6KSLLwVhv-0
+
+----------------------------
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
