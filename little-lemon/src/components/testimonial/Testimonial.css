@@ -1,0 +1,16 @@
+.testimonial {
+    background-color: var(--white);
+    padding: 20px;
+}
+
+.testimonial > img {
+    width: 50px;
+    height: 50px;
+}
+
+.testimonial > span {
+    float: right;
+    margin-top: 18px;
+    margin-left: 5px;
+
+}

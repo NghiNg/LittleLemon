@@ -1,0 +1,21 @@
+.footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 20%;
+    background-color: var(--gray);
+}
+.footer > img {
+    width: 150px;
+    border-radius: 16px;
+}
+
+.footer > section > h4 {
+    color: var(--green);
+    font-weight: bold;
+}
+
+.footer__list, .footer-nav__list {
+    list-style-type: none;
+    padding: 0;
+}
