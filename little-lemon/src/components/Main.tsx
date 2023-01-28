@@ -24,7 +24,7 @@ export const Main = (): JSX.Element => {
                 <button className="card-title">Online Menu</button>
                 <h3 className="section-title">SPECIALS</h3>
                 <div>
-                    {foods.map(food => <Card title={food.title} price={food.price} info={food.info}/>)}
+                    {foods.map(food => <Card key={food.title} title={food.title} price={food.price} info={food.info}/>)}
                 </div>
             </section>
             <section className="main__testimonials">
@@ -44,8 +44,10 @@ export const Main = (): JSX.Element => {
                     Exercitation veniam consequat sunt nostrud amet.
                     Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
                 </p>
-                <img src={require("./images/a.jpg")}/>
-                <img src={require("./images/b.jpg")}/>
+                <div className="main__info-images">
+                    <img src={require("./images/a.jpg")}/>
+                    <img src={require("./images/b.jpg")}/>
+                </div>
             </section>
         </main>
     );
