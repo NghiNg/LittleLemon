@@ -1,0 +1,95 @@
+@import '../../index.css';
+
+main > section {
+    padding: 40px 10%;
+}
+
+.main__about, .main__testimonials {
+    background-color: var(--green);
+}
+
+.main__about > img {
+    max-width: 50%;
+    max-height: 300px;
+    float: right;
+}
+
+.main__about > h1 {
+    color: var(--yellow);
+}
+.main__about > h2 {
+    color: var(--white);
+}
+.main__about > p {
+    color: var(--white);
+    margin-bottom: 40px;
+}
+
+.main__specials-button {
+    float: right;
+}
+
+.main__specials > div {
+    display: flex;
+    flex-direction: row;
+    margin: 0 -20px;
+}
+
+.main__testimonials {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.main__testimonials > div {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.main__info {
+    position: relative;
+}
+
+.main__info-images {
+    position: relative;
+    height: 300px;
+    width: 500px;
+}
+
+@media only screen and (min-width: 1600px) {
+    .main__info-images {
+        margin-top: -300px;
+        float: right;
+    }
+}
+
+.main__info-images > img:first-of-type {
+    position: absolute;
+    height: 200px;
+    left: 200px;
+    z-index: 1;
+    border-radius: 16px;
+}
+
+
+.main__info-images > img:last-of-type {
+    position: absolute;
+    height: 200px;
+    top: 100px;
+    border-radius: 16px;
+}
+
+button {
+    background-color: var(--yellow);
+    padding: 20px;
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: bold;
+    border: none;
+    border-radius: 16px;
+    color: var(--black);
+}

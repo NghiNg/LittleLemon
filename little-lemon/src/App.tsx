@@ -3,7 +3,8 @@ import { Routes, Route, BrowserRouter, Outlet } from 'react-router-dom'
 
 import './App.css';
 import { Header } from './components/header/Header'
-import { Main } from './components/Main'
+import { Main } from './components/main/Main'
+import { Reservations } from './components/reservations/Reservations'
 import { Footer } from './components/footer/Footer'
 
 const AppLayout = (): JSX.Element =>
@@ -23,7 +24,7 @@ function App() {
           <Route path='/' element={<Main/>}/>
           <Route path='/about' element={<Main/>}/>
           <Route path='/menu' element={<Main/>}/>
-          <Route path='/reservations' element={<Main/>}/>
+          <Route path='/reservations' element={<Reservations/>}/>
           <Route path='/order' element={<Main/>}/>
           <Route path='/login' element={<Main/>}/>
         </Route>
