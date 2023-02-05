@@ -97,7 +97,7 @@ const MainContent = ({availableTimes}: {availableTimes: AvailableTimes}) => {
                 </div>
             </section>
             <section>
-                <p className="card-title">Available times for booking</p>
+                <label htmlFor="res-date" className="card-title">Available times for booking</label>
                 <input className="lead-text" id="res-date" type="date" name="date" value={date} onChange={input => setDate(input.target.value)}/>
                {date !== "" && <ul>
                     {Object.entries(availableTimes).filter((time) => time[1]).map((time) => <li>{time[0]}</li>)}
