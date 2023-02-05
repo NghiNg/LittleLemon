@@ -83,7 +83,7 @@ main > section {
     border-radius: 16px;
 }
 
-button {
+button, .button {
     background-color: var(--yellow);
     padding: 20px;
     font-size: 18px;

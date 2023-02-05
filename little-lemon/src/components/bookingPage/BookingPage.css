@@ -1,0 +1,39 @@
+@import '../../index.css';
+
+
+.booking > h1 {
+    color: var(--yellow);
+}
+.booking > img {
+    width: 100%;
+    height: 500px;
+}
+
+.booking__form {
+    background-color: var(--green);
+    color: var(--white);
+}
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-row-gap: 20px;
+}
+
+label > span {
+    color: red;
+}
+
+input, textarea, select {
+    border-radius: 8px;
+    width: 100%;
+}
+
+.booking__submit {
+    width: fit-content;
+}
+
+.booking__confirmed > img {
+    width: 100%;
+    margin-top: 100px;
+}
