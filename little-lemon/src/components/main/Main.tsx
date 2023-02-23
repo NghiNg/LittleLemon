@@ -6,29 +6,12 @@ import './Main.css'
 import { Testimonial } from '../testimonial/Testimonial'
 import { Card } from '../card/Card'
 import { BookingPage } from '../bookingPage/BookingPage'
+import { fetchAPI } from './api.js'
 
-export interface AvailableTimes {
-    "17:00": boolean,
-    "18:00": boolean,
-    "19:00": boolean,
-    "20:00": boolean,
-    "21:00": boolean,
-    "22:00": boolean
-}
-export const initializeTimes = (): AvailableTimes => {
-    return {"17:00": true,
-    "18:00": true,
-    "19:00": true,
-    "20:00": true,
-    "21:00": true,
-    "22:00": true}
-}
+export const initializeTimes = (date: Date): string[] => fetchAPI(date)
 
-const availableReducer = (state: AvailableTimes, action: {time: "17:00"|"18:00"|"19:00"|"20:00"|"21:00"|"22:00"}) => {
-        const temp = {...state};
-        temp[action.time] = false;
-        console.log(temp);
-        return temp;
+const availableReducer = (state: string[], action: {date: Date}) => {
+    return fetchAPI(action.date)
 }
 
 export const Main = () => {
@@ -40,8 +23,8 @@ export const Main = () => {
 
     const [isReservingTable, setIsReservingTable] = useState(false);
 
-    const [availableTimes, updateTimes] = useReducer(availableReducer, initializeTimes());
-    const [date, setDate] = useState("");
+    const [date, setDate] = useState(new Date());
+    const [availableTimes, updateTimes] = useReducer(availableReducer, initializeTimes(date));
 
     if (isReservingTable) {
         return (<BookingPage availableTimes={availableTimes} updateTime={updateTimes} onFinishedReserving={() => setIsReservingTable(false)}/>)
@@ -87,10 +70,10 @@ export const Main = () => {
             </section>
             <section>
                 <label htmlFor="res-date" className="card-title">Available times for booking</label>
-                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date} onChange={input => setDate(input.target.value)}/>
-               {date !== "" && <ul>
-                    {Object.entries(availableTimes).filter((time) => time[1]).map((time) => <li>{time[0]}</li>)}
-                </ul>}
+                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date.toISOString().substring(0, 10)} onChange={input => setDate(new Date(input.target.value))}/>
+               <ul>
+                    {availableTimes.map(time => <li key={time}>{time}</li>)}
+                </ul>
             </section>
         </main>
     );

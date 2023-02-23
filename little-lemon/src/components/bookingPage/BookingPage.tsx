@@ -1,11 +1,11 @@
 import './BookingPage.css'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AvailableTimes } from '../main/Main'
+import { submitAPI } from '../main/api.js'
 
 interface Booking {
-    date: string;
-    time: "17:00" | "18:00" | "19:00" | "20:00" | "21:00" | "22:00";
+    date: Date;
+    time: string;
     people: string;
     occasion: string;
     name: string;
@@ -13,13 +13,13 @@ interface Booking {
     comment?: string;
 }
 
-export const BookingPage = ({availableTimes, updateTime, onFinishedReserving}: {availableTimes: AvailableTimes, updateTime: React.Dispatch<{
-    time: "17:00" | "18:00" | "19:00" | "20:00" | "21:00" | "22:00";
+export const BookingPage = ({availableTimes, updateTime, onFinishedReserving}: {availableTimes: string[], updateTime: React.Dispatch<{
+    date: Date;
 }>, onFinishedReserving: () => void}): JSX.Element => {
     const [isSentIn, setIsSentIn] = useState(false);
     const [form, setForm] = useState<Booking>({
-        date: "",
-        time: "17:00",
+        date: new Date(),
+        time: availableTimes[0],
         people: "1",
         occasion: "birthday",
         name: "",
@@ -36,7 +36,7 @@ export const BookingPage = ({availableTimes, updateTime, onFinishedReserving}: {
             {isSentIn ?
                 <ConfirmedBooking booking={form} onFinishedReserving={onFinishedReserving}/>
             :
-                <BookingForm form={form} setForm={setForm} onConfirm={() => {updateTime({time: form.time}); setIsSentIn(true)}} availableTimes={availableTimes}/>
+                <BookingForm form={form} setForm={setForm} onConfirm={() => {updateTime({date: form.date}); setIsSentIn(submitAPI(form))}} availableTimes={availableTimes}/>
             }
         </main>
     );
@@ -48,10 +48,9 @@ const BookingForm = ({
     form: Booking,
     setForm: (value: Booking) => void,
     onConfirm: () => void,
-    availableTimes: AvailableTimes,
+    availableTimes: string[],
 }): JSX.Element => {
     const validateForm = () =>
-            form.date !== "" &&
             form.name !== "" &&
             form.phone !== "";
 
@@ -61,12 +60,12 @@ const BookingForm = ({
                 <h2 className="card-title">BOOKING INFORMATION</h2>
                 <form>
                     <label className="lead-text" htmlFor="res-date">Date <span>*</span></label>
-                    <input className="lead-text" data-testid={"date"} id="res-date" type="date" name="date" onChange={(input) => setForm({...form, date: input.target.value})}/>
+                    <input className="lead-text" data-testid={"date"} id="res-date" type="date" name="date" value={form.date.toISOString().substring(0,10)} onChange={(input) => setForm({...form, date: new Date(input.target.value)})}/>
                     <label className="lead-text" htmlFor="res-time">Time <span>*</span></label>
                     <select className="lead-text" id="res-time" value={form.time} name="time"
-                     onChange={(input) => setForm({...form, time: input.target.value as "17:00" | "18:00" | "19:00" | "20:00" | "21:00" | "22:00"})}
+                     onChange={(input) => setForm({...form, time: input.target.value})}
                     >
-                        {Object.entries(availableTimes).filter((time) => time[1]).map((time) => <option value={time[0]} key={time[0]}>{time[0]}</option>)}
+                        {availableTimes.map((time: string) => <option value={time} key={time}>{time}</option>)}
 
                     </select>
                     <label className="lead-text" htmlFor="guests">How many people <span>*</span></label>
@@ -104,7 +103,7 @@ const ConfirmedBooking = ({booking, onFinishedReserving}: {booking: Booking, onF
     return (
         <section className="booking__confirmed">
             <h1 className="display-title">Booking confirmation</h1>
-            <p className="paragraph-text"><>{booking.date} at {booking.time} for {booking.people} people.</></p>
+            <p className="paragraph-text"><>{booking.date.toISOString().substring(0,10)} at {booking.time} for {booking.people} {Number(booking.people) === 1 ? 'person' : 'people'}.</></p>
             <p className="paragraph-text">{booking.name} {booking.phone} for your {booking.occasion}!</p>
             <p className="paragraph-text">{booking.comment}</p>
             <p className="highlight-text">Excited to see you!</p>
