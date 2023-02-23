@@ -1,5 +1,5 @@
 import { useState, useReducer } from 'react'
-import { Link } from 'react-router-dom'
+import { Routes, Link, Route, useNavigate } from 'react-router-dom'
 
 import './Main.css'
 
@@ -21,60 +21,61 @@ export const Main = () => {
         {title: "Lemon Dessert", price: 5.00, info: "This comes straight from grandma's recipe book, every last ingredient has been sourced and is as authentic as can be imagined."},
     ]
 
-    const [isReservingTable, setIsReservingTable] = useState(false);
-
     const [date, setDate] = useState(new Date());
     const [availableTimes, updateTimes] = useReducer(availableReducer, initializeTimes(date));
-
-    if (isReservingTable) {
-        return (<BookingPage availableTimes={availableTimes} updateTime={updateTimes} onFinishedReserving={() => setIsReservingTable(false)}/>)
-    }
-
+    const navigate = useNavigate()
     return (
         <main >
-            <section className="main__about">
-                <img src={require("../images/restauranfood.jpg")}/>
-                <h1 className="display-title">Little Lemon</h1>
-                <h2>Chicago</h2>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                <button className="card-title" onClick={() => setIsReservingTable(true)}>Reserve a Table</button>
-            </section>
-            <section className="main__specials">
-                <button className="main__specials-button card-title" role={"link"} onClick={() => window.location.href=`${window.location.host}/menu`}>Online Menu</button>
-                <h3 className="section-title">SPECIALS</h3>
-                <div>
-                    {foods.map(food => <Card key={food.title} title={food.title} price={food.price} info={food.info}/>)}
-                </div>
-            </section>
-            <section className="main__testimonials">
-                <h3 className="section-title">Testimonials</h3>
-                <div>
-                    <Testimonial/>
-                    <Testimonial/>
-                    <Testimonial/>
-                    <Testimonial/>
-                </div>
-            </section>
-            <section className="main__info">
-                <h1 className="display-title">Little Lemon</h1>
-                <h2 className="sub-title">Chicago</h2>
-                <p className="paragraph-text">
-                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
-                    Exercitation veniam consequat sunt nostrud amet.
-                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
-                </p>
-                <div className="main__info-images">
-                    <img src={require("../images/a.jpg")}/>
-                    <img src={require("../images/b.jpg")}/>
-                </div>
-            </section>
-            <section>
-                <label htmlFor="res-date" className="card-title">Available times for booking</label>
-                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date.toISOString().substring(0, 10)} onChange={input => setDate(new Date(input.target.value))}/>
-               <ul>
-                    {availableTimes.map(time => <li key={time}>{time}</li>)}
-                </ul>
-            </section>
+                <Routes>
+                    <Route path="/booking/*" element={<BookingPage availableTimes={availableTimes} updateTime={updateTimes}/>}/>
+                    <Route path="/" element={
+                        <>
+                            <section className="main__about">
+                                <img src={require("../images/restauranfood.jpg")}/>
+                                <h1 className="display-title">Little Lemon</h1>
+                                <h2>Chicago</h2>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                                <button className="card-title" onClick={() => navigate("/booking")}>Reserve a Table</button>
+                            </section>
+                            <section className="main__specials">
+                                <button className="main__specials-button card-title" role={"link"} onClick={() => window.location.href=`${window.location.host}/menu`}>Online Menu</button>
+                                <h3 className="section-title">SPECIALS</h3>
+                                <div>
+                                    {foods.map(food => <Card key={food.title} title={food.title} price={food.price} info={food.info}/>)}
+                                </div>
+                            </section>
+                            <section className="main__testimonials">
+                                <h3 className="section-title">Testimonials</h3>
+                                <div>
+                                    <Testimonial/>
+                                    <Testimonial/>
+                                    <Testimonial/>
+                                    <Testimonial/>
+                                </div>
+                            </section>
+                            <section className="main__info">
+                                <h1 className="display-title">Little Lemon</h1>
+                                <h2 className="sub-title">Chicago</h2>
+                                <p className="paragraph-text">
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
+                                    Exercitation veniam consequat sunt nostrud amet.
+                                    Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
+                                </p>
+                                <div className="main__info-images">
+                                    <img src={require("../images/a.jpg")}/>
+                                    <img src={require("../images/b.jpg")}/>
+                                </div>
+                            </section>
+                            <section>
+                                <label htmlFor="res-date" className="card-title">Available times for booking</label>
+                                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date.toISOString().substring(0, 10)} onChange={input => setDate(new Date(input.target.value))}/>
+                            <ul>
+                                    {availableTimes.map(time => <li key={time}>{time}</li>)}
+                                </ul>
+                            </section>
+                        </>
+                    }/>
+                </Routes>
         </main>
     );
 }

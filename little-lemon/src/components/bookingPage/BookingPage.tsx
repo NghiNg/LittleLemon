@@ -1,6 +1,6 @@
 import './BookingPage.css'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Routes, Link, Route, useNavigate } from 'react-router-dom'
 import { submitAPI } from '../main/api.js'
 
 interface Booking {
@@ -13,9 +13,9 @@ interface Booking {
     comment?: string;
 }
 
-export const BookingPage = ({availableTimes, updateTime, onFinishedReserving}: {availableTimes: string[], updateTime: React.Dispatch<{
+export const BookingPage = ({availableTimes, updateTime}: {availableTimes: string[], updateTime: React.Dispatch<{
     date: Date;
-}>, onFinishedReserving: () => void}): JSX.Element => {
+}>}): JSX.Element => {
     const [isSentIn, setIsSentIn] = useState(false);
     const [form, setForm] = useState<Booking>({
         date: new Date(),
@@ -27,17 +27,29 @@ export const BookingPage = ({availableTimes, updateTime, onFinishedReserving}: {
         comment: "",
     })
 
+    const navigate = useNavigate();
+
     return (
         <main className="booking">
             <section className="booking">
                 <h1 className="display-title">Reserve a table</h1>
                 <img src={require("../images/restaurant.jpg")}/>
             </section>
-            {isSentIn ?
-                <ConfirmedBooking booking={form} onFinishedReserving={onFinishedReserving}/>
-            :
-                <BookingForm form={form} setForm={setForm} onConfirm={() => {updateTime({date: form.date}); setIsSentIn(submitAPI(form))}} availableTimes={availableTimes}/>
-            }
+                <Routes>
+                    <Route path="/" element={
+                        <BookingForm
+                            form={form}
+                            setForm={setForm}
+                            onConfirm={() => {
+                                updateTime({date: form.date});
+                                if (submitAPI(form)) {
+                                    navigate("confirmation");
+                                }
+                            }}
+                            availableTimes={availableTimes}
+                        />}/>
+                    <Route path="/confirmation" element={ <ConfirmedBooking booking={form} />}/>
+                </Routes>
         </main>
     );
 }
@@ -99,7 +111,8 @@ const BookingForm = ({
     );
 }
 
-const ConfirmedBooking = ({booking, onFinishedReserving}: {booking: Booking, onFinishedReserving: () => void}): JSX.Element => {
+const ConfirmedBooking = ({booking}: {booking: Booking}): JSX.Element => {
+    const navigate = useNavigate()
     return (
         <section className="booking__confirmed">
             <h1 className="display-title">Booking confirmation</h1>
@@ -107,7 +120,7 @@ const ConfirmedBooking = ({booking, onFinishedReserving}: {booking: Booking, onF
             <p className="paragraph-text">{booking.name} {booking.phone} for your {booking.occasion}!</p>
             <p className="paragraph-text">{booking.comment}</p>
             <p className="highlight-text">Excited to see you!</p>
-            <button className="card-title" onClick={onFinishedReserving}>Back to mainpage</button>
+            <button className="card-title" onClick={() => navigate("/")}>Back to mainpage</button>
             <img src={require("../images/chef.jpg")}/>
         </section>
     )
