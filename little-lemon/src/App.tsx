@@ -21,10 +21,10 @@ function App() {
       <Routes>
         <Route element={<AppLayout/>}>
           <Route path={'/*'} element={<Main/>}/>
-          <Route path='/about' element={<Main/>}/>
-          <Route path='/menu' element={<Main/>}/>
-          <Route path='/order' element={<Main/>}/>
-          <Route path='/login' element={<Main/>}/>
+          <Route path='/about' element={<h1>ABOUT</h1>}/>
+          <Route path='/menu' element={<h1>MENU</h1>}/>
+          <Route path='/reservations' element={<h1>RESERVATIONS</h1>}/>
+          <Route path='/login' element={<h1>LOGIN</h1>}/>
         </Route>
       </Routes>
       </BrowserRouter>

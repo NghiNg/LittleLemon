@@ -68,9 +68,9 @@ export const Main = () => {
                             </section>
                             <section>
                                 <label htmlFor="res-date" className="card-title">Available times for booking</label>
-                                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date.toISOString().substring(0, 10)} onChange={input => setDate(new Date(input.target.value))}/>
-                            <ul>
-                                    {availableTimes.map(time => <li key={time}>{time}</li>)}
+                                <input className="lead-text" data-testid={"availability"} id="res-date" type="date" name="date" value={date.toISOString().substring(0, 10)} onChange={input => {setDate(new Date(input.target.value)); updateTimes({date: new Date(input.target.value)})}}/>
+                                <ul>
+                                    {Array.isArray(availableTimes) ? availableTimes.map(time => <li key={time}>{time}</li>) : <></>}
                                 </ul>
                             </section>
                         </>

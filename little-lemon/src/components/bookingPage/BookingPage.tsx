@@ -16,7 +16,6 @@ interface Booking {
 export const BookingPage = ({availableTimes, updateTime}: {availableTimes: string[], updateTime: React.Dispatch<{
     date: Date;
 }>}): JSX.Element => {
-    const [isSentIn, setIsSentIn] = useState(false);
     const [form, setForm] = useState<Booking>({
         date: new Date(),
         time: availableTimes[0],
@@ -39,7 +38,7 @@ export const BookingPage = ({availableTimes, updateTime}: {availableTimes: strin
                     <Route path="/" element={
                         <BookingForm
                             form={form}
-                            setForm={setForm}
+                            setForm={(value: Booking, date?: Date) => {setForm(value); if (date){updateTime({date})}}}
                             onConfirm={() => {
                                 updateTime({date: form.date});
                                 if (submitAPI(form)) {
@@ -58,7 +57,7 @@ const BookingForm = ({
     form, setForm, onConfirm, availableTimes
 }: {
     form: Booking,
-    setForm: (value: Booking) => void,
+    setForm: (value: Booking, date?: Date) => void,
     onConfirm: () => void,
     availableTimes: string[],
 }): JSX.Element => {
@@ -66,18 +65,25 @@ const BookingForm = ({
             form.name !== "" &&
             form.phone !== "";
 
+    const saveBooking = () => {
+        localStorage.setItem("booking", `
+        ${form.date.toISOString().substring(0,10)} at ${form.time} for ${form.people} ${Number(form.people) === 1 ? 'person' : 'people'}.
+        ${form.name} ${form.phone} for your ${form.occasion}!
+        ${form.comment}
+        `);
+    }
     return (
         <>
             <section className="booking__form">
                 <h2 className="card-title">BOOKING INFORMATION</h2>
                 <form>
                     <label className="lead-text" htmlFor="res-date">Date <span>*</span></label>
-                    <input className="lead-text" data-testid={"date"} id="res-date" type="date" name="date" value={form.date.toISOString().substring(0,10)} onChange={(input) => setForm({...form, date: new Date(input.target.value)})}/>
+                    <input className="lead-text" data-testid={"date"} id="res-date" type="date" name="date" value={form.date.toISOString().substring(0,10)} onChange={(input) => setForm({...form, date: new Date(input.target.value)}, new Date(input.target.value))}/>
                     <label className="lead-text" htmlFor="res-time">Time <span>*</span></label>
                     <select className="lead-text" id="res-time" value={form.time} name="time"
                      onChange={(input) => setForm({...form, time: input.target.value})}
                     >
-                        {availableTimes.map((time: string) => <option value={time} key={time}>{time}</option>)}
+                        {Array.isArray(availableTimes) ? availableTimes.map((time: string) => <option value={time} key={time}>{time}</option>) : null}
 
                     </select>
                     <label className="lead-text" htmlFor="guests">How many people <span>*</span></label>
@@ -101,6 +107,7 @@ const BookingForm = ({
                     onClick={() => {
                         if (validateForm()) {
                             onConfirm();
+                            saveBooking();
                         } else {
                             alert("Not all required fields are filled out!");
                         }
@@ -113,12 +120,11 @@ const BookingForm = ({
 
 const ConfirmedBooking = ({booking}: {booking: Booking}): JSX.Element => {
     const navigate = useNavigate()
+    const form = localStorage.getItem("booking");
     return (
         <section className="booking__confirmed">
             <h1 className="display-title">Booking confirmation</h1>
-            <p className="paragraph-text"><>{booking.date.toISOString().substring(0,10)} at {booking.time} for {booking.people} {Number(booking.people) === 1 ? 'person' : 'people'}.</></p>
-            <p className="paragraph-text">{booking.name} {booking.phone} for your {booking.occasion}!</p>
-            <p className="paragraph-text">{booking.comment}</p>
+            <p className="paragraph-text">{form}</p>
             <p className="highlight-text">Excited to see you!</p>
             <button className="card-title" onClick={() => navigate("/")}>Back to mainpage</button>
             <img src={require("../images/chef.jpg")}/>
