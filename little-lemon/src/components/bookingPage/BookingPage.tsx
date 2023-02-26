@@ -124,7 +124,7 @@ const ConfirmedBooking = ({booking}: {booking: Booking}): JSX.Element => {
     return (
         <section className="booking__confirmed">
             <h1 className="display-title">Booking confirmation</h1>
-            <p className="paragraph-text">{form}</p>
+            <p className="paragraph-text" data-testid="booking-information">{form}</p>
             <p className="highlight-text">Excited to see you!</p>
             <button className="card-title" onClick={() => navigate("/")}>Back to mainpage</button>
             <img src={require("../images/chef.jpg")}/>
