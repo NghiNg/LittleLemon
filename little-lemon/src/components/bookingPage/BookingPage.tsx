@@ -1,5 +1,5 @@
 import './BookingPage.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Routes, Link, Route, useNavigate } from 'react-router-dom'
 import { submitAPI } from '../main/api.js'
 
@@ -61,10 +61,6 @@ const BookingForm = ({
     onConfirm: () => void,
     availableTimes: string[],
 }): JSX.Element => {
-    const validateForm = () =>
-            form.name !== "" &&
-            form.phone !== "";
-
     const saveBooking = () => {
         localStorage.setItem("booking", `
         ${form.date.toISOString().substring(0,10)} at ${form.time} for ${form.people} ${Number(form.people) === 1 ? 'person' : 'people'}.
@@ -72,31 +68,41 @@ const BookingForm = ({
         ${form.comment}
         `);
     }
+
+    const [formErrors, setFormError] = useState({date: false, people: false, name: false, phone: false});
+
+    useEffect(() => {
+        setFormError({date: availableTimes.length === 0, people: Number(form.people) < 1, name: form.name.length < 3, phone: form.phone.length < 8});
+    }, [form, setForm])
     return (
         <>
             <section className="booking__form">
                 <h2 className="card-title">BOOKING INFORMATION</h2>
                 <form>
                     <label className="lead-text" htmlFor="res-date">Date <span>*</span></label>
-                    <input className="lead-text" data-testid={"date"} id="res-date" type="date" name="date" value={form.date.toISOString().substring(0,10)} onChange={(input) => setForm({...form, date: new Date(input.target.value)}, new Date(input.target.value))}/>
+                    {formErrors.date && <p className="error-text">No available times for this date.</p>}
+                    <input className={`lead-text ${formErrors.date ? "input--error" : ""}`} required data-testid={"date"} id="res-date" type="date"  name="date" value={form.date.toISOString().substring(0,10)} onChange={(input) => {console.log(availableTimes); setForm({...form, date: new Date(input.target.value)}, new Date(input.target.value)); console.log(availableTimes)}}/>
                     <label className="lead-text" htmlFor="res-time">Time <span>*</span></label>
-                    <select className="lead-text" id="res-time" value={form.time} name="time"
+                    <select className="lead-text"required  id="res-time" value={form.time} name="time"
                      onChange={(input) => setForm({...form, time: input.target.value})}
                     >
                         {Array.isArray(availableTimes) ? availableTimes.map((time: string) => <option value={time} key={time}>{time}</option>) : null}
 
                     </select>
                     <label className="lead-text" htmlFor="guests">How many people <span>*</span></label>
-                    <input className="lead-text" value={form.people} id="guests" name="people" type="number" placeholder="1" min="1" max="10" onChange={(input) => setForm({...form, people: input.target.value})}/>
+                    {formErrors.people && <p className="error-text">Can't book empty tables</p>}
+                    <input className={`lead-text ${formErrors.people ? "input--error" : ""}`} required value={form.people} id="guests" name="people" type="number" placeholder="1" min="1" max="10" onChange={(input) => setForm({...form, people: input.target.value})}/>
                     <label className="lead-text" htmlFor="occasion">Occasion</label>
-                    <select className="lead-text" id="occasion" onChange={(input) => setForm({...form, occasion: input.target.value})}>
+                    <select className="lead-text" required id="occasion" onChange={(input) => setForm({...form, occasion: input.target.value})}>
                         <option value="birthday">Birthday</option>
                         <option value="anniversary">Anniversary</option>
                     </select>
                     <label className="lead-text" htmlFor="res-name">Name <span>*</span></label>
-                    <input className="lead-text" id="res-name" data-testid={"name"} value={form.name} name="name" type="text" onChange={(input) => setForm({...form, name: input.target.value})}/>
+                    {formErrors.date && <p className="error-text">Name needs to be longer.</p>}
+                    <input className={`lead-text ${formErrors.name ? "input--error" : ""}`} id="res-name" required data-testid={"name"}  value={form.name} name="name" type="text" minLength={3} onChange={(input) => setForm({...form, name: input.target.value})}/>
                     <label className="lead-text" htmlFor="res-phone">Phone Number <span>*</span></label>
-                    <input className="lead-text" id="res-phone" data-testid={"phone"} value={form.phone} name="phone" type="number" onChange={(input) => setForm({...form, phone: input.target.value})}/>
+                    {formErrors.date && <p className="error-text">Phone numer needs to be longer</p>}
+                    <input className={`lead-text ${formErrors.phone ? "input--error" : ""}`} id="res-phone" required data-testid={"phone"} value={form.phone} name="phone" type="number" minLength={8} onChange={(input) => setForm({...form, phone: input.target.value})}/>
                     <label className="lead-text" htmlFor="res-comment">Comment</label>
                     <textarea className="lead-text" id="res-comment" value={form.comment} name="comment" onChange={(input) => setForm({...form, comment: input.target.value})}/>
                 </form>
@@ -105,7 +111,7 @@ const BookingForm = ({
                     type="submit"
                     value="Make your reservation"
                     onClick={() => {
-                        if (validateForm()) {
+                        if (!(formErrors.date || formErrors.name || formErrors.people || formErrors.phone)) {
                             onConfirm();
                             saveBooking();
                         } else {
