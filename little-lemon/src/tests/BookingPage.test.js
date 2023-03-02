@@ -17,6 +17,12 @@ test('Renders the BookingForm heading', () => {
     expect(headingElement).toBeInTheDocument();
 })
 
+test('Submit button on invalid form popup error message', () => {
+    render(<BrowserRouter><BookingPage availableTimes={availableTimesMock} updateTime={({date: Date}) => {null}}/></BrowserRouter>)
+    fireEvent.click(screen.getByText("Make your reservation"))
+    expect(screen.getByText("How many people")).toBeInTheDocument();
+})
+
 test('Removes errormessage when name input changes to valid state', () => {
     render(<BrowserRouter><BookingPage availableTimes={availableTimesMock} updateTime={({date: Date}) => {null}}/></BrowserRouter>)
     const nameErrorMessage = screen.getByText("Name needs to be longer.");
