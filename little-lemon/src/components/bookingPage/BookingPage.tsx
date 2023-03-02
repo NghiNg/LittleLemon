@@ -72,6 +72,7 @@ const BookingForm = ({
     const [formErrors, setFormError] = useState({date: false, people: false, name: false, phone: false});
 
     useEffect(() => {
+        console.log(formErrors);
         setFormError({date: availableTimes.length === 0, people: Number(form.people) < 1, name: form.name.length < 3, phone: form.phone.length < 8});
     }, [form, setForm])
     return (
@@ -98,10 +99,10 @@ const BookingForm = ({
                         <option value="anniversary">Anniversary</option>
                     </select>
                     <label className="lead-text" htmlFor="res-name">Name <span>*</span></label>
-                    {formErrors.date && <p className="error-text">Name needs to be longer.</p>}
+                    {formErrors.name && <p className="error-text">Name needs to be longer.</p>}
                     <input className={`lead-text ${formErrors.name ? "input--error" : ""}`} id="res-name" required data-testid={"name"}  value={form.name} name="name" type="text" minLength={3} onChange={(input) => setForm({...form, name: input.target.value})}/>
                     <label className="lead-text" htmlFor="res-phone">Phone Number <span>*</span></label>
-                    {formErrors.date && <p className="error-text">Phone numer needs to be longer</p>}
+                    {formErrors.phone && <p className="error-text">Phone number needs to be longer.</p>}
                     <input className={`lead-text ${formErrors.phone ? "input--error" : ""}`} id="res-phone" required data-testid={"phone"} value={form.phone} name="phone" type="number" minLength={8} onChange={(input) => setForm({...form, phone: input.target.value})}/>
                     <label className="lead-text" htmlFor="res-comment">Comment</label>
                     <textarea className="lead-text" id="res-comment" value={form.comment} name="comment" onChange={(input) => setForm({...form, comment: input.target.value})}/>
