@@ -32,7 +32,7 @@ export const BookingPage = ({availableTimes, updateTime}: {availableTimes: strin
         <main className="booking">
             <section className="booking">
                 <h1 className="display-title">Reserve a table</h1>
-                <img src={require("../images/restaurant.jpg")}/>
+                <img alt="picture of a restaurant" src={require("../images/restaurant.jpg")}/>
             </section>
                 <Routes>
                     <Route path="/" element={
@@ -72,7 +72,6 @@ const BookingForm = ({
     const [formErrors, setFormError] = useState({date: false, people: false, name: false, phone: false});
 
     useEffect(() => {
-        console.log(formErrors);
         setFormError({date: availableTimes.length === 0, people: Number(form.people) < 1, name: form.name.length < 3, phone: form.phone.length < 8});
     }, [form, setForm])
     return (
@@ -134,7 +133,7 @@ const ConfirmedBooking = ({booking}: {booking: Booking}): JSX.Element => {
             <p className="paragraph-text" data-testid="booking-information">{form}</p>
             <p className="highlight-text">Excited to see you!</p>
             <button className="card-title" onClick={() => navigate("/")}>Back to mainpage</button>
-            <img src={require("../images/chef.jpg")}/>
+            <img alt="picture of a chef making food" src={require("../images/chef.jpg")}/>
         </section>
     )
 }

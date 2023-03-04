@@ -31,14 +31,14 @@ export const Main = () => {
                     <Route path="/" element={
                         <>
                             <section className="main__about">
-                                <img src={require("../images/restauranfood.jpg")}/>
+                                <img alt="picture of baguettes" src={require("../images/restauranfood.jpg")}/>
                                 <h1 className="display-title">Little Lemon</h1>
                                 <h2>Chicago</h2>
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                <button className="card-title" onClick={() => navigate("/booking")}>Reserve a Table</button>
+                                <button className="card-title" aria-label="On Click" onClick={() => navigate("/booking")}>Reserve a Table</button>
                             </section>
                             <section className="main__specials">
-                                <button className="main__specials-button card-title" role={"link"} onClick={() => window.location.href=`${window.location.host}/menu`}>Online Menu</button>
+                                <button className="main__specials-button card-title" aria-label="On Click" role={"link"} onClick={() => window.location.href=`${window.location.host}/menu`}>Online Menu</button>
                                 <h3 className="section-title">SPECIALS</h3>
                                 <div>
                                     {foods.map(food => <Card key={food.title} title={food.title} price={food.price} info={food.info}/>)}
@@ -62,8 +62,8 @@ export const Main = () => {
                                     Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit.
                                 </p>
                                 <div className="main__info-images">
-                                    <img src={require("../images/a.jpg")}/>
-                                    <img src={require("../images/b.jpg")}/>
+                                    <img alt="picture of two chefs" src={require("../images/a.jpg")}/>
+                                    <img alt="picture of two chefs" src={require("../images/b.jpg")}/>
                                 </div>
                             </section>
                             <section>
