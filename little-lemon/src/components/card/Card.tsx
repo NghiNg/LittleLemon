@@ -10,7 +10,7 @@ export const Card = ({title, price, info}: {title: string, price: number, info: 
                 <span>${price.toFixed(2)}</span>
             </div>
             <p className="paragraph-text">{info}</p>
-            <a className="card-title" href="/order">Order a delivery <Scooter/></a>
+            <a className="card-title" href="/booking">Order a delivery <Scooter/></a>
         </div>
     );
 }
